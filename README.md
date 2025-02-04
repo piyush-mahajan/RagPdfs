@@ -98,3 +98,9 @@ Copy
 Edit
 streamlit run <your_script_name>.py
 Replace <your_script_name>.py with the actual file name (e.g., app.py).
+
+Usage
+Upload PDFs: Use the sidebar to upload multiple PDF files.
+Process PDFs: Click the "Process" button to extract text and create embeddings.
+Ask Questions: Use the chat interface to ask questions about the content in your PDFs.
+View Data: Explore extracted text and vector embeddings using the tabs provided.
