@@ -14,6 +14,7 @@ from PIL import Image
 import io
 import numpy as np
 import pandas as pd
+import re
 
 # CSS remains the same
 css = '''
@@ -64,7 +65,15 @@ user_template = '''
 
 def extract_text_from_image(image):
     try:
-        text = pytesseract.image_to_string(image, lang='eng')
+        # Convert image to grayscale
+        gray_image = image.convert('L')
+        
+        # Apply thresholding to binarize the image
+        thresholded_image = gray_image.point(lambda x: 0 if x < 128 else 255, '1')
+        
+        # Use Tesseract with specific configuration
+        custom_config = r'--oem 3 --psm 6'  # Use LSTM OCR Engine and assume a single uniform block of text
+        text = pytesseract.image_to_string(thresholded_image, config=custom_config)
         return text
     except Exception as e:
         st.error(f"Error in OCR processing: {str(e)}")
@@ -92,7 +101,9 @@ def get_pdf_text(pdf_docs):
                     st.info(f"No text found in {pdf.name} using direct extraction. Attempting OCR...")
                     images = convert_from_bytes(pdf_content)
                     for image in images:
-                        page_text = extract_text_from_image(image)
+                        # Rotate the image if necessary
+                        rotated_image = correct_image_orientation(image)
+                        page_text = extract_text_from_image(rotated_image)
                         if page_text.strip():
                             page_texts.append(page_text)
                 
@@ -118,6 +129,21 @@ def get_pdf_text(pdf_docs):
     except Exception as e:
         st.error(f"Error processing PDFs: {str(e)}")
         return None, None
+
+def correct_image_orientation(image):
+    """Correct the orientation of the image if it is rotated."""
+    # Use pytesseract to detect orientation
+    osd = pytesseract.image_to_osd(image)
+    rotation = int(re.search(r'Rotate:\s*(\d+)', osd).group(1))
+    
+    if rotation == 90:
+        return image.rotate(-90, expand=True)
+    elif rotation == 180:
+        return image.rotate(180, expand=True)
+    elif rotation == 270:
+        return image.rotate(90, expand=True)
+    
+    return image  # No rotation needed
 
 def get_text_chunks(text):
     if text is None:

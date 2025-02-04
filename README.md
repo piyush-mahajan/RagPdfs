@@ -1,49 +1,100 @@
-# ChatPDF 📄✨
+# Enhanced PDF Chat with Gemini 📚
 
-Welcome to ChatPDF - your interactive PDF assistant powered by OpenAI's cutting-edge language model! ChatPDF enables you to interact with your PDFs in a whole new way, extracting information, summarizing content, and much more.
+This Streamlit-based application allows you to upload PDFs, extract their text (using both standard extraction and OCR), store them in a FAISS vector store, and interact with the content using Google's Gemini AI model.
 
-## Getting Started 🚀
+---
 
-### Step 1: Obtain Your API Key 🔑
+## Features
 
-To interact with the OpenAI model, you will need an API key. Follow these steps to obtain one:
+- **PDF Text Extraction**: Extracts text from PDFs using `PyPDF2`.
+- **OCR Processing**: Uses Tesseract OCR to extract text from image-based PDFs.
+- **Text Chunking**: Splits extracted text into manageable chunks using LangChain's `CharacterTextSplitter`.
+- **Vector Store**: Converts text into embeddings using HuggingFace models and stores them in a FAISS vector store.
+- **Conversational AI**: Interact with your PDF content through a chat interface powered by Google's Gemini AI.
+- **Interactive UI**: Built with Streamlit, featuring a chat interface and expandable views for extracted text and vector data.
 
-1. Visit the [OpenAI website](https://openai.com).
-2. Sign up for an account if you don't already have one.
-3. Navigate to the API section and follow the instructions to generate your API key.
+---
 
-### Step 2: Set Your API Key 🛠️
+## Setup Instructions
 
-Once you have your API key, you'll need to configure the application to use it. In the `app.py` file, find the line that looks like this:
-
-```python
-os.environ["OPENAI_API_KEY"] = "sk-r7QTNcbEeRBAub8quuJAT3BlbkFJQNnPTgSaUVvGhxxxx"
-```
-
-Replace the placeholder key with your actual API key.
-
-### Step 3: Install Dependencies 📦
-
-ChatPDF requires several dependencies to run. Install them using the provided `requirements.txt` file with the following command:
+### 1. Clone the Repository
 
 ```bash
+git clone <repository-url>
+cd <repository-folder>
+
+
+Here's the README content in code format:
+
+markdown
+Copy
+Edit
+# Enhanced PDF Chat with Gemini 📚
+
+This Streamlit-based application allows you to upload PDFs, extract their text (using both standard extraction and OCR), store them in a FAISS vector store, and interact with the content using Google's Gemini AI model.
+
+---
+
+## Features
+
+- **PDF Text Extraction**: Extracts text from PDFs using `PyPDF2`.
+- **OCR Processing**: Uses Tesseract OCR to extract text from image-based PDFs.
+- **Text Chunking**: Splits extracted text into manageable chunks using LangChain's `CharacterTextSplitter`.
+- **Vector Store**: Converts text into embeddings using HuggingFace models and stores them in a FAISS vector store.
+- **Conversational AI**: Interact with your PDF content through a chat interface powered by Google's Gemini AI.
+- **Interactive UI**: Built with Streamlit, featuring a chat interface and expandable views for extracted text and vector data.
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd <repository-folder>
+2. Set Up a Virtual Environment (Optional but Recommended)
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+3. Install Dependencies
+bash
+Copy
+Edit
 pip install -r requirements.txt
-```
+If a requirements.txt file is not provided, you can manually install the required packages:
 
-### Step 4: Launch the Application 🌟
+bash
+pip install streamlit PyPDF2 langchain langchain_huggingface langchain_google_genai langchain_community google-generativeai pytesseract pdf2image pillow numpy pandas
 
-With your API key set and dependencies installed, you're ready to start the application. Navigate to the root folder of the directory and run:
 
-```bash
-streamlit run app.py
-```
+4. Install Additional System Dependencies
+Tesseract OCR: Required for extracting text from images.
 
-The application should now be up and running on your local server. Open your web browser and go to the address indicated by Streamlit (usually `http://localhost:8501`) to start using ChatPDF.
+Ubuntu/Debian: sudo apt-get install tesseract-ocr
+MacOS: brew install tesseract
+Windows: Download the installer
+Poppler: Required for pdf2image to convert PDFs to images.
 
-## Features 🌈
+Ubuntu/Debian: sudo apt-get install poppler-utils
+MacOS: brew install poppler
+Windows: Download Poppler for Windows
 
-ChatPDF comes with a plethora of features designed to make your interaction with PDF documents as smooth as possible:
+5. Set Up Environment Variables
+Create a .streamlit/secrets.toml file and add your Google API key:
 
-- **Information Extraction**: Pull out key details or data from your PDF files.
-- **Content Summarization**: Get concise summaries of lengthy documents.
-- **Q&A with your PDF**: Ask questions and get answers based on the content of your PDFs.
+
+[GOOGLE_API_KEY]
+GOOGLE_API_KEY = "your_google_api_key_here"
+
+
+Running the Application
+Start the Streamlit app with:
+
+bash
+Copy
+Edit
+streamlit run <your_script_name>.py
+Replace <your_script_name>.py with the actual file name (e.g., app.py).
